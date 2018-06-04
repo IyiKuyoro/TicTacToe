@@ -6,6 +6,7 @@ public class Main {
 
     private static char[][] grid = new char[3][3];
     private static int counter = 0;
+    private static int comMoves = 0;
 
     public static void main(String[] args) {
 	    System.out.println("This is a new TikTacToe Game.");
@@ -151,9 +152,147 @@ public class Main {
 
     private static void ComputerPlays() {
         Random rnd = new Random();
-        boolean success = false;
 
-        while(!success) {
+        if (comMoves == 0){
+            //first move must be in the middle of on any of for corners
+
+            //if human played on the edge, play in the center.
+            if(grid[0][0] == 'X' || grid[2][0] == 'X' || grid[0][2] == 'X' || grid[2][2] == 'X'){
+                grid[1][1] = 'O';
+                counter++;
+                comMoves++;
+                return;
+            }
+            else if( grid[1][1] == 'X') {    //Else if human played in the center, play on the edge
+                //Get row number
+                int row = rnd.nextInt(3);
+                while (row < 0 || row > 2 || row == 1) {
+                    row = rnd.nextInt(3);
+                }
+
+                //Get col number
+                int col = rnd.nextInt(3);
+                while ((col < 0 || col > 2 || col == 1)) {
+                    col = rnd.nextInt(3);
+                }
+
+                if (grid[row][col] == ' ') {
+                    grid[row][col] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+        }
+        else{   //Not the first move then track player. If about to win block else advance
+            for(int i = 0; i < 3; i++) {
+                //Check if player is about to win game horizontally
+                if (grid[i][0] == grid[i][1] && grid[i][0] == 'X' ) {
+                    if(grid[i][2] == ' '){
+                        grid[i][2] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+                else if (grid[i][1] == grid[i][2] && grid[i][1] == 'x'){
+                    if(grid[i][0] == ' '){
+                        grid[i][0] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+                else if (grid[i][0] == grid[i][2] && grid[i][0] == 'x'){
+                    if(grid[i][1] == ' '){
+                        grid[i][1] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+
+                //Check if player is about to win vertically
+                if (grid[0][i] == grid[1][i] && grid[0][i] == 'X') {
+                    if(grid[2][i] == ' '){
+                        grid[2][i] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+                else if (grid[1][i] == grid[2][i] && grid[1][i] == 'X'){
+                    if(grid[0][i] == ' '){
+                        grid[0][i] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+                else if (grid[0][i] == grid[2][i] && grid[0][i] == 'X'){
+                    if(grid[1][i] == ' '){
+                        grid[1][i] = 'O';
+                        counter++;
+                        comMoves++;
+                        return;
+                    }
+                }
+            }
+
+            //Check if player is about to win diagonally
+            if(grid[0][0] == grid[1][1] && grid[0][0] == 'X'){
+                if (grid[2][2] == ' '){
+                    grid[2][2] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+            else if(grid[1][1] == grid[2][2] && grid[1][1] == 'X'){
+                if (grid[0][0] == ' ') {
+                    grid[0][0] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+            else if(grid[0][0] == grid[2][2] && grid[0][0] == 'X'){
+                if (grid[1][1] == ' '){
+                    grid[1][1] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+            if(grid[2][0] == grid[1][1] && grid[2][0] == 'X'){
+                if (grid[0][2] == ' '){
+                    grid[0][2] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+            else if (grid[1][1] == grid[0][2] && grid[1][1] == 'X'){
+                if (grid[2][0] == ' '){
+                    grid[2][0] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+            else if (grid[2][0] == grid[0][2] && grid[2][0] == 'X'){
+                if (grid[1][1] == ' '){
+                    grid[1][1] = 'O';
+                    counter++;
+                    comMoves++;
+                    return;
+                }
+            }
+        }
+
+        //play randomly
+        boolean success = false;
+        do {
             //Get row number
             int row = rnd.nextInt(3);
             while (row < 0 || row > 2) {
@@ -166,12 +305,13 @@ public class Main {
                 col = rnd.nextInt(3);
             }
 
-            if(grid[row][col] ==  ' '){
+            if (grid[row][col] == ' ') {
                 grid[row][col] = 'O';
                 counter++;
+                comMoves++;
                 success = true;
             }
-        }
+        }while(!success);
     }
 
     private static void DrawGird() {
